@@ -1,0 +1,45 @@
+<?php
+libxml_use_internal_errors(true);
+
+// Use SteamUtility to fetch URLs and other stuff
+require_once 'SteamUtility.php';
+
+/**
+* SteamApps - Used to query Steam Apps in general
+*
+* @category   SteamAPI
+* @copyright  Copyright (c) 2015 Matt Ryder (www.mattryder.co.uk)
+* @license    GPLv2 License
+* @version    v1.3
+* @link       https://github.com/MattRyder/SteamAPI/blob/master/steam/SteamUser.php
+* @since      Class available since v1.3
+*/
+class SteamApps {
+
+  const API_BASE = "http://api.steampowered.com/ISteamApps/";
+  private $apiKey;
+
+  /**
+   * Constructor
+   * @param string $apiKey  Steam Community API key
+   */
+  function __construct($apiKey = null) {
+    if (!is_null($apiKey)) {
+      $this->apiKey = $apiKey;
+    }
+  }
+
+  /**
+   * WebAPI/GetAppList
+   * - Returns a list of Apps, with their ID and Name set
+   * @param boolean $reload Whether to miss cache and reload data
+   */
+  function getAppList($reload = false) {
+    $apiAction = "GetAppList/v2/?format=xml";
+
+    // Valve highly recommend caching this, it's quite a big GET
+    if(isset($this->appList) && !$reload) {
+      return $this->appList;
+    } else {
+      $this->appList = array();
+    }
